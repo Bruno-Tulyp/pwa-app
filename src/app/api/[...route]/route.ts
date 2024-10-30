@@ -13,7 +13,11 @@ type Job = {
 }
 
 app.get("/jobs", (c) => {
-  const jobs = new Array<Job>(10).fill(generateJob())
+  const jobs: Job[] = []
+
+  for (let i = 0; i < 10; i += 1) {
+    jobs.push(generateJob())
+  }
 
   return c.json({ jobs })
 })
