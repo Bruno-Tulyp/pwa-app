@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker"
 
 export const generateJob = () => ({
+  id: faker.string.uuid(),
   jobName: faker.person.jobTitle(),
   jobDescription: faker.lorem.paragraphs(3),
   salary: faker.number.int({ min: 1800, max: 3500 }).toLocaleString("fr-FR", {
