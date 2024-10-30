@@ -36,8 +36,6 @@ app.post("/jobs", async (c) => {
   const job = generateJob()
 
   if (sub) {
-    console.log("There is a subscription!")
-
     const data = {
       title: "New job offer!",
       body: "A new job offer is available, click on the notification to access.",
