@@ -90,20 +90,26 @@ const Profile = () => {
         <CardContent>
           <div className="flex flex-col space-y-4">
             <p className="mt-4 text-gray-700">{user.bio}</p>
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-wrap justify-between items-center space-y-2">
               <div className="flex flex-row space-x-2">
-                <Button className="w-fit">
+                <Button className="w-fit flex items-center space-x-2">
                   <PencilSquareIcon />
-                  Edit Profile
+                  <span>Edit Profile</span>
                 </Button>
-                <Button onClick={handleAddNewJob}>
+                <Button
+                  onClick={handleAddNewJob}
+                  className="flex items-center space-x-2"
+                >
                   <PlusIcon />
-                  Add New Job
+                  <span>Add New Job</span>
                 </Button>
               </div>
-              <Button variant="destructive">
+              <Button
+                variant="destructive"
+                className="flex items-center space-x-2 w-full sm:w-auto"
+              >
                 <TrashIcon />
-                Delete Account
+                <span>Delete Account</span>
               </Button>
             </div>
           </div>
