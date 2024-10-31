@@ -1,3 +1,5 @@
+import Header from "@/components/header"
+import { Toaster } from "@/components/ui/sonner"
 import type { Metadata } from "next"
 import "./globals.css"
 
@@ -13,7 +15,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-red-50">
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="p-8">{children}</main>
+          <Toaster />
+        </div>
+      </body>
     </html>
   )
 }
