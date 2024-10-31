@@ -1,5 +1,5 @@
 const CACHE_NAME = "my-cache-v1"; // Un cache général pour toutes les pages
-const URLS_TO_CACHE = ["/", "/dashboard", "/myprofile"]; // Ajoutez la page d'accueil et d'autres ressources nécessaires
+const URLS_TO_CACHE = ["/", "/dashboard", "/myprofile", "/styles/global.css"]; // Ajoutez la page d'accueil et d'autres ressources nécessaires
 
 // Installation du service worker et mise en cache des URLs
 self.addEventListener("install", (event) => {
