@@ -42,10 +42,7 @@ self.addEventListener("fetch", (event) => {
             }).catch(() => {
               // Retourner le fichier offline.html si hors ligne
           return caches.match("/offline.html").then((offlineResponse) => {
-            return offlineResponse || new Response("Page non disponible", {
-              status: 404,
-              statusText: "Not Found"
-            });
+            return offlineResponse;
           });
             })
           );
@@ -78,10 +75,7 @@ self.addEventListener("fetch", (event) => {
           fetch(event.request).catch(() => {
             // Retourner la page d'accueil si hors ligne
             return caches.match("/").then((homePageResponse) => {
-              return homePageResponse || new Response("Page non disponible", {
-                status: 404,
-                statusText: "Not Found"
-              });
+              return homePageResponse;
             });
           })
         );
