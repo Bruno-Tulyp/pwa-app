@@ -1,95 +1,112 @@
 "use client"
 
+import { Job } from "@/app/api/[...route]/route"
+import { Badge } from "@/components/ui/badge"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ArrowPathIcon,
+  BriefcaseIcon,
+  CalendarIcon,
+  CheckBadgeIcon,
+  CurrencyDollarIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/solid"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge" // Import the Badge component
-import { generateJob } from "@/app/utils/generate-job"
-import { Job } from "@/app/api/[...route]/route"
 
 const Page = () => {
-  const { id } = useParams()
+  const { id } = useParams<{ id: string }>()
+
   const [job, setJob] = useState<Job | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const generatedJob = generateJob()
-    setJob(generatedJob)
-  }, [id])
+    setIsLoading(false)
 
-  if (!job) return <p className="text-center text-gray-500 mt-8">Loading...</p>
+    const jobs = localStorage.getItem("jobs")
+
+    if (!jobs) {
+      return
+    }
+
+    const parsedJobs: Job[] = JSON.parse(jobs)
+
+    const potentialJob = parsedJobs.find(({ id: jobId }) => jobId === id)
+
+    if (potentialJob) {
+      setJob(potentialJob)
+    }
+  }, [])
+
+  if (isLoading) {
+    return (
+      <p className="bg-card px-6 py-4 rounded-md w-fit font-medium flex flex-row gap-2 items-center border">
+        <ArrowPathIcon className="size-6 animate-spin" />
+        Loading...
+      </p>
+    )
+  }
+
+  if (!job) {
+    return (
+      <p className="bg-card px-6 py-4 rounded-md w-fit font-medium flex flex-row gap-2 items-center border">
+        <InformationCircleIcon className="size-6" />
+        This job offer does not exist!
+      </p>
+    )
+  }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Job Details - {job.jobName}
-      </h1>
-      <Table className="bg-card overflow-hidden rounded-md">
-        <TableCaption>Details of the selected job position.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Detail</TableHead>
-            <TableHead>Information</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow className="border-b border-gray-200">
-            <TableCell className="font-medium text-gray-700 px-4 py-3">
-              Job Name
-            </TableCell>
-            <TableCell className="px-4 py-3 text-gray-800">
-              {job.jobName}
-            </TableCell>
-          </TableRow>
-          <TableRow className="border-b border-gray-200">
-            <TableCell className="font-medium text-gray-700 px-4 py-3">
-              Publish Date
-            </TableCell>
-            <TableCell className="px-4 py-3 text-gray-800">
-              {job.publishDate}
-            </TableCell>
-          </TableRow>
-          <TableRow className="border-b border-gray-200">
-            <TableCell className="font-medium text-gray-700 px-4 py-3">
-              Job Description
-            </TableCell>
-            <TableCell className="px-4 py-3 text-gray-800">
-              {job.jobDescription}
-            </TableCell>
-          </TableRow>
-          <TableRow className="border-b border-gray-200">
-            <TableCell className="font-medium text-gray-700 px-4 py-3">
-              Skills
-            </TableCell>
-            <TableCell className="px-4 py-3 text-gray-800">
-              {/* Render each skill as a badge */}
-              <div className="flex flex-wrap gap-2">
-                {job.skills.map((skill, index) => (
-                  <Badge key={index} className="bg-black text-white">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium text-gray-700 px-4 py-3">
-              Salary
-            </TableCell>
-            <TableCell className="px-4 py-3 text-gray-800">
-              {job.salary}
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
+    <Card className="w-full max-w-3xl mx-auto">
+      <CardHeader>
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col space-y-1">
+            <CardTitle>{job.jobName}</CardTitle>
+            <CardDescription>Job ID: {job.id}</CardDescription>
+          </div>
+
+          <Badge className="flex flex-row items-center gap-2">
+            <CalendarIcon className="size-3" />
+            {job.publishDate}
+          </Badge>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        <div className="flex items-center space-x-2">
+          <CurrencyDollarIcon className="size-6" />
+          <span className="font-semibold">{job.salary}</span>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <div className="flex items-center space-x-2">
+            <BriefcaseIcon className="size-6" />
+            <span className="font-semibold">Job Description</span>
+          </div>
+          <p className="text-justify">{job.jobDescription}</p>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <div className="flex items-center space-x-2">
+            <CheckBadgeIcon className="size-6" />
+            <span className="font-semibold">Required Skills</span>
+          </div>
+          <div className="flex flex-row space-x-2">
+            {job.skills.map((skill, index) => (
+              <Badge key={index} variant="secondary">
+                {skill}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
