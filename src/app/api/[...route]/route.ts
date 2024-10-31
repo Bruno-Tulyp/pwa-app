@@ -13,7 +13,7 @@ webpush.setVapidDetails(
 
 const app = new Hono().basePath("/api")
 
-type Job = {
+export type Job = {
   id: string
   jobName: string
   jobDescription: string

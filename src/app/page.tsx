@@ -1,10 +1,8 @@
-import PushNotificationManager from "@/app/components/push-notification-manager"
-import Dashboard from "../components/dashboard"
+import PushNotificationManager from "@/components/push-notification-manager"
 
 const Page = () => (
   <div>
     <PushNotificationManager />
-    <Dashboard />
   </div>
 )
 
